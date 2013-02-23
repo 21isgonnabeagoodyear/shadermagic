@@ -1,0 +1,9 @@
+shadermagic
+provides a nicer interface for loading opengl shaders than what's included with opengl, and a simple macro language for common things like loading textures, setting up FBOs and using glsl libraries
+
+
+you'll need SDL2 to compile the example program, but any library that gives you an opengl ~3.2 context should work for creating your own
+
+
+compile the example program under linux with
+gcc -g main.c -o main `sdl2-config --cflags --libs` -lGL
