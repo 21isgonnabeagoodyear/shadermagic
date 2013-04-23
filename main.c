@@ -113,7 +113,7 @@ int main()
 	float wroty = 0;
 	float speed = 0.001;
 	mat_identity(rotmat);
-	SDL_SetRelativeMouseMode(SDL_TRUE);//this is not supported on all platforms, warping the mouse is more portable
+	//SDL_SetRelativeMouseMode(SDL_TRUE);//this is not supported on all platforms, warping the mouse is more portable
 	for(i=0;i>=0;i++)
 	{
 		sm_use("example");
@@ -123,6 +123,8 @@ int main()
 
 
 		sm_use("examplefeedback");
+		float wavetime = SDL_GetTicks() * 0.01;
+		glUniform1fv(sm_uniloc("wavetime"), 1,&wavetime);
 		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, instancedobjectspositionvbo);//set output for transform feedback
 		glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, feedbackquery);//start counting
 		{
@@ -201,7 +203,11 @@ int main()
 		if(keys[SDL_SCANCODE_LCTRL])
 			transy +=speed;
 		int mousex, mousey;
-		SDL_GetRelativeMouseState(&mousex, &mousey);
+		//SDL_GetRelativeMouseState(&mousex, &mousey);
+		SDL_GetMouseState(&mousex, &mousey);
+		SDL_WarpMouseInWindow(win, 400,400);
+		mousex = mousex-400;
+		mousey = mousey-400;
 		wrot -= mousex/1000.0;
 		wroty-= mousey/1000.0;
 		wroty = wroty > 1.57?1.57:wroty<-1.57?-1.57:wroty;

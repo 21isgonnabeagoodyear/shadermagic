@@ -8,4 +8,5 @@ in vec3 col;
 void main(void)
 {
 	color = vec4(col,1);
+//	color = vec4(1,1,1,1)*(int(gl_FragCoord.x) & int(gl_FragCoord.y));
 }
