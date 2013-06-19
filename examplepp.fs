@@ -41,7 +41,7 @@ void main(void)
 	for(int i=0;i<NUMSAMPLES;i++)
 	{
 		vec2 samplepos =  sspos*0.5+vec2(0.5,0.5) + i*0.02/NUMSAMPLES*vec2(sin(float(i)), cos(float(i)));
-		ssaoaccum += 3*vec3(clamp(1000*(texture(unprocessedscreendepth, samplepos).r-depth), -1.5*(1.0/NUMSAMPLES), (1.0/NUMSAMPLES)));//SSAO
+		ssaoaccum += float(3*vec3(clamp(1000*(texture(unprocessedscreendepth, samplepos).r-depth), -1.5*(1.0/NUMSAMPLES), (1.0/NUMSAMPLES))));//SSAO
 	}
 	color.rgb *= 1 + ssaoaccum;///(depth+1)*2;
 	for(int i=0;i<NUMSAMPLES;i++)
