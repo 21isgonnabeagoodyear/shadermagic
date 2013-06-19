@@ -108,13 +108,13 @@ static void parsedata(char *source)
 					else{printf("invalid size %s\n", words[2]);}
 
 					GLint type = GL_RGBA;
-					if(numwords >= 6 && strcmp(words[3], "FLOAT") == 0 )
+					if(numwords >= 4 && strcmp(words[3], "FLOAT") == 0 )
 						type = GL_RGBA32F;
 					printf("setting up framebuffer output %s\n", words[1]);
 					glGenFramebuffers(1,&shaderdata[numshaders].fbo);
 					glBindFramebuffer(GL_FRAMEBUFFER, shaderdata[numshaders].fbo);
 					//smt_gen(words[3],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, GL_RGBA);
-					smt_gen(words[3],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, type);
+					smt_gen(words[1],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, type);
 					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+shaderdata[numshaders].numfboattachments++, GL_TEXTURE_2D, smt_gettex(words[1]),0);
 					GLenum fbstat = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 					if(fbstat != GL_FRAMEBUFFER_COMPLETE)
