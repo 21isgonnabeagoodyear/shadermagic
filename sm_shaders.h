@@ -110,8 +110,11 @@ static void parsedata(char *source)
 					GLint type = GL_RGBA;
 					if(numwords >= 4 && strcmp(words[3], "FLOAT") == 0 )
 						type = GL_RGBA32F;
-					printf("setting up framebuffer output %s\n", words[1]);
-					glGenFramebuffers(1,&shaderdata[numshaders].fbo);
+					printf("setting up framebuffer output %s attachment %d\n", words[1], shaderdata[numshaders].numfboattachments);
+					if(shaderdata[numshaders].numfboattachments == 0)//only one fbo per shader, but possibly multiple attachments
+					{
+						glGenFramebuffers(1,&shaderdata[numshaders].fbo);
+					}
 					glBindFramebuffer(GL_FRAMEBUFFER, shaderdata[numshaders].fbo);
 					//smt_gen(words[3],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, GL_RGBA);
 					smt_gen(words[1],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, type);
@@ -122,7 +125,7 @@ static void parsedata(char *source)
 
 				}
 				else
-					printf("usage: //@FBOUT name resolution, where resolution is one of SCREEN, HALFSCREEN, SMALL, MEDIUM, LARGE\n");
+					printf("usage: //@FBOUT name resolution [FLOAT], where resolution is one of SCREEN, HALFSCREEN, SMALL, MEDIUM, LARGE\n");
 
 			}
 			else if(strcmp(words[0], "//@FBDEP")==0)
@@ -142,7 +145,7 @@ static void parsedata(char *source)
 				int worditer;
 				for(worditer=1;worditer < numwords; worditer ++)
 					names[worditer-1] = &words[worditer][0];
-				glTransformFeedbackVaryings(shaderdata[numshaders].program, numwords -1, names, GL_INTERLEAVED_ATTRIBS);//FIXME
+				glTransformFeedbackVaryings(shaderdata[numshaders].program, numwords -1, names, GL_INTERLEAVED_ATTRIBS);//XXX:does this have to go after compileShader?
 			}
 			else if(strcmp(words[0], "//@INCLUDE")==0 && numwords > 1)//FIXME:parse recursively
 			{
@@ -304,9 +307,22 @@ void sm_use(char *name)//sets the active program object to the one specified
 			glBindFramebuffer(GL_FRAMEBUFFER, shaderdata[i].fbo);
 			glUseProgram(shaderdata[i].program);
 			if(shaderdata[i].fbo ==0)
+			{
 				glViewport(0,0,smscreenw,smscreenh);
+			//	GLenum target = GL_FRONT_LEFT;
+			//	glDrawBuffers(1, target);//FUCK OFF AMD
+			}
 			else
+			{
 				glViewport(0,0,shaderdata[i].fboresx,shaderdata[i].fboresy);
+
+				GLenum targets[50];
+				int j;
+				//targets[0]=GL_DEPTH_ATTACHMENT;
+				for(j=0;j<10;j++)
+					targets[j] = GL_COLOR_ATTACHMENT0+j;
+				glDrawBuffers(shaderdata[i].numfboattachments, targets);
+			}
 			currentshader = i;
 			return;
 		}
