@@ -7,6 +7,8 @@ static struct
 	GLuint id;
 	char name[101];
 	GLuint textureslot;
+	int width;
+	int height;
 } texinfo[50];
 static int numtex=0;
 static GLuint lasttextureunit = 0;
@@ -105,7 +107,9 @@ printf("using slot %d for texture %s\n", texinfo[numtex].textureslot, filename);
 	fclose(input);
 	strncpy(texinfo[numtex].name, filename, 99);
 //	numtex ++;
-	return texinfo[numtex++].textureslot;
+	texinfo[numtex].width = header.xsize;
+	texinfo[numtex].height = header.ysize;
+	return texinfo[numtex++].textureslot;//XXX:why is this a post increment?
 }
 GLuint smt_gen(char name[], int w, int h, GLenum type)//creates a new, blank texture 
 {
@@ -135,8 +139,10 @@ GLuint smt_gen(char name[], int w, int h, GLenum type)//creates a new, blank tex
 	else
 		glTexImage2D(GL_TEXTURE_2D, 0, type, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	strncpy(texinfo[numtex].name, name, 99);
-	numtex ++;
-	return texinfo[numtex].textureslot;
+	//numtex ++;
+	texinfo[numtex].width = w;
+	texinfo[numtex].height = h;
+	return texinfo[numtex++].textureslot;//XXX:changed this to post increment
 }
 GLuint smt_gettex(char name[])//gets the id of the texture buffer (not its texture unit)
 {
@@ -151,6 +157,18 @@ GLuint smt_gettex(char name[])//gets the id of the texture buffer (not its textu
 
 
 }
-
+void smt_gettexres(char name[], int *width, int *height)
+{
+	int i;
+	for(i=0;i<numtex;i++)
+	{
+		if(strncmp(texinfo[i].name, name, 100) ==0)
+		{
+			//return texinfo[i].id;
+			*width = texinfo[i].width;
+			*height = texinfo[i].height;
+		}
+	}
+}
 
 #endif

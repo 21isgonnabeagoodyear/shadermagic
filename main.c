@@ -19,8 +19,8 @@ int main()
 	SDL_Window *win = SDL_CreateWindow("hello world", 0, 0,640, 480, SDL_WINDOW_OPENGL);
 #define ASPECT 640.0/480
 #else
-	SDL_Window *win = SDL_CreateWindow("hello world", 0, 0,1366, 768, SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN);
-#define ASPECT 1366.0/768
+	SDL_Window *win = SDL_CreateWindow("hello world", 0, 0,2560, 1440, SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN);
+#define ASPECT 2560.0/1440
 #endif
 	SDL_ShowWindow(win);
 
@@ -30,7 +30,7 @@ int main()
 	sm_screensize(640,480);
 //	glViewport(0,0,640,480);
 #else
-	sm_screensize(1366,768);
+	sm_screensize(2560,1440);
 //	glViewport(0,0,1366,768);
 #endif
 	glEnable(GL_DEPTH_TEST);

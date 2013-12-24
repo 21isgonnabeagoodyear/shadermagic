@@ -118,6 +118,7 @@ static void parsedata(char *source)
 					glBindFramebuffer(GL_FRAMEBUFFER, shaderdata[numshaders].fbo);
 					//smt_gen(words[3],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, GL_RGBA);
 					smt_gen(words[1],shaderdata[numshaders].fboresx,shaderdata[numshaders].fboresy, type);
+					smt_gettexres(words[1], &shaderdata[numshaders].fboresx, &shaderdata[numshaders].fboresy);//if texture has already been created, override the specified resolution
 					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+shaderdata[numshaders].numfboattachments++, GL_TEXTURE_2D, smt_gettex(words[1]),0);
 					GLenum fbstat = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 					if(fbstat != GL_FRAMEBUFFER_COMPLETE)
