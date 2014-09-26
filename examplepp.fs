@@ -36,7 +36,7 @@ void main(void)
 //	vec2 sspos = normalize(sspos)*pow(length(sspos),2);
 
 	color = texture(unprocessedscreen, sspos*0.5+vec2(0.5,0.5));
-	float depth = texture(unprocessedscreendepth, sspos*0.5+vec2(0.5,0.5));
+	float depth = texture(unprocessedscreendepth, sspos*0.5+vec2(0.5,0.5)).r;
 	float ssaoaccum = 0;
 	for(int i=0;i<NUMSAMPLES;i++)
 	{
@@ -59,10 +59,10 @@ color.a=1;
 
 
 
-	vec2 temp = sspos*2;
+	vec2 temp = (sspos+vec2(-0.5,0))*1.1;
 	for(int i=0;i<20;i++)
 	{
-		temp = complexsquare(temp)+sspos*2;
+		temp = complexsquare(temp)+(sspos+vec2(-0.5,0))*1.1;
 		if(length(temp) > 2)
 		{
 			color = vec4(0,0,1,1)*(1.0/i);

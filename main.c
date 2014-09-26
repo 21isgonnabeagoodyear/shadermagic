@@ -173,7 +173,7 @@ int main()
 				i= -i;
 		}
 
-		char *keys = SDL_GetKeyboardState(NULL);
+		const char *keys = SDL_GetKeyboardState(NULL);
 		speed = 0.1;
 		if(keys[SDL_SCANCODE_LSHIFT])
 			speed = 2.8;
